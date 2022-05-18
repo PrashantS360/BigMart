@@ -7,7 +7,7 @@ const CartItem = (props) => {
     const [ItemQuantity, setItemQuantity] = useState(itemDetails.qty);
 
     const deleteItems = async () => {
-        const response = await fetch(`http://localhost:8000/api/auth/deleteitem/${itemDetails._id}`, {
+        const response = await fetch(`${process.env.REACT_APP_BACKEND_URI}/api/auth/deleteitem/${itemDetails._id}`, {
             method: "DELETE",
             headers: {
                 'Content-Type': 'application/json',
@@ -16,7 +16,9 @@ const CartItem = (props) => {
         });
 
         const json = await response.json();
-        window.location.reload();
+        if (json){
+            window.location.reload();
+        }
     }
 
     function plusItem(n) {
@@ -29,7 +31,7 @@ const CartItem = (props) => {
         let minus = document.getElementsByClassName(`minus${itemDetails.itemCode}`)[0];
 
 
-        const response = await fetch(`http://localhost:8000/api/auth/changeqty/${itemDetails._id}`, {
+        const response = await fetch(`${process.env.REACT_APP_BACKEND_URI}/api/auth/changeqty/${itemDetails._id}`, {
             method: "PUT",
             headers: {
                 'Content-Type': 'application/json',

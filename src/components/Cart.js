@@ -21,7 +21,7 @@ const Cart = () => {
         setTotalPrice(price);
     }
     const getCartItems = async () => {
-        const response = await fetch(`http://localhost:8000/api/auth/mycart`, {
+        const response = await fetch(`${process.env.REACT_APP_BACKEND_URI}/api/auth/mycart`, {
             method: "GET",
             headers: {
                 'Content-Type': 'application/json',
@@ -38,23 +38,27 @@ const Cart = () => {
         for (let i = 0; i < items.length; i++) {
             let item = items[i];
             console.log(item);
-            const response = await fetch(`http://localhost:8000/api/auth/order`, {
+            const response = await fetch(`${process.env.REACT_APP_BACKEND_URI}/api/auth/order`, {
                 method: "POST",
                 headers: {
                     'Content-Type': 'application/json',
                     'auth-token': localStorage.getItem('token')
                 },
-                body: JSON.stringify({ itemCode: item.itemCode, title: item.product[0].title, imgLink: item.imgLink, price: item.product[0].price, qty: item.qty, delivered: false,discount:item.product[0].discount })
+                body: JSON.stringify({ itemCode: item.itemCode, title: item.product[0].title, imgLink: item.imgLink, price: item.product[0].price, qty: item.qty, delivered: false, discount: item.product[0].discount })
             });
+            if (response) {
+                console.log('order placed');
+            }
         }
+
         alert('Your Order Is Placed Successfully');
         clearCart();
     }
 
-    const clearCart = async() => {
+    const clearCart = async () => {
         for (let i = 0; i < items.length; i++) {
             let itemDetails = items[i];
-            const response = await fetch(`http://localhost:8000/api/auth/deleteitem/${itemDetails._id}`, {
+            const response = await fetch(`${process.env.REACT_APP_BACKEND_URI}/api/auth/deleteitem/${itemDetails._id}`, {
                 method: "DELETE",
                 headers: {
                     'Content-Type': 'application/json',
@@ -63,6 +67,9 @@ const Cart = () => {
             });
 
             const json = await response.json();
+            if(json){
+                console.log("cart is cleared");
+            }
         }
         history.push('/');
     }

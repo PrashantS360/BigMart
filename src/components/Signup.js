@@ -14,7 +14,7 @@ const Signup = () => {
         if (credentials.cpassword !== credentials.password) {
             return alert('Password and Confirm Password field should be same!')
         }
-        const response = await fetch(`http://localhost:8000/api/auth/createuser`, {
+        const response = await fetch(`${process.env.REACT_APP_BACKEND_URI}/api/auth/createuser`, {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json'

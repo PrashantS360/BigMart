@@ -11,7 +11,7 @@ const Product = () => {
     // let len=1;
     const [itemDetails, setItemDetails] = useState({ description: [{ para: {}, highlights: [] }] });
     const getItem = async () => {
-        const response = await fetch(`http://localhost:8000/api/auth/getitem/${iCode}`, {
+        const response = await fetch(`${process.env.REACT_APP_BACKEND_URI}/api/auth/getitem/${iCode}`, {
             method: "GET",
             headers: {
                 'Content-Type': 'application/json'
@@ -24,7 +24,7 @@ const Product = () => {
     }
 
     const addedInCart = async () => {
-        const response = await fetch(`http://localhost:8000/api/auth/mycart`, {
+        const response = await fetch(`${process.env.REACT_APP_BACKEND_URI}/api/auth/mycart`, {
             method: "GET",
             headers: {
                 'Content-Type': 'application/json',
@@ -45,7 +45,7 @@ const Product = () => {
     const addToCart = async () => {
         console.log(itemDetails);
         let product = { title: itemDetails.title, reviews: itemDetails.reviews, price: itemDetails.price, mrp: itemDetails.mrp, discount: itemDetails.discount };
-        const response = await fetch(`http://localhost:8000/api/auth/additem`, {
+        const response = await fetch(`${process.env.REACT_APP_BACKEND_URI}/api/auth/additem`, {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json',

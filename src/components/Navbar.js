@@ -3,10 +3,8 @@ import '../App.css';
 import { useHistory } from 'react-router-dom'
 import { Link } from "react-router-dom";
 import { HiOutlineLogin } from "react-icons/hi";
-import { useLocation } from 'react-router-dom';
 
 const Navbar = () => {
-    let location = useLocation();
     let history = useHistory();
     const [logged, setLogged] = useState(false);
     const [searchVal, setSearchVal] = useState("");

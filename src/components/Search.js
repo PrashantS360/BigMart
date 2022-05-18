@@ -8,7 +8,7 @@ const Search = () => {
     const [searchItems, setSearchItems] = useState([]);
     // console.log(location.pathname);
     const getItems = async () => {
-        const response = await fetch(`http://localhost:8000/api/auth${location.pathname}`, {
+        const response = await fetch(`${process.env.REACT_APP_BACKEND_URI}/api/auth${location.pathname}`, {
             method: "GET",
             headers: {
                 'Content-Type': 'application/json'

@@ -14,8 +14,8 @@ const Filter = () => {
     console.log(cat);
     let json;
     if (cat !== 'top-offers') {
-      const response = await fetch(`http://localhost:8000/api/auth/getproducts/${cat}`, {
-        method: "POST",
+      const response = await fetch(`${process.env.REACT_APP_BACKEND_URI}/api/auth/getproducts/${cat}`, {
+        method: "GET",
         headers: {
           'Content-Type': 'application/json'
         }
@@ -23,7 +23,7 @@ const Filter = () => {
       json = await response.json();
     }
     else {
-      const response = await fetch(`http://localhost:8000/api/auth/getallitems`, {
+      const response = await fetch(`${process.env.REACT_APP_BACKEND_URI}/api/auth/getallitems`, {
         method: "GET",
         headers: {
           'Content-Type': 'application/json'

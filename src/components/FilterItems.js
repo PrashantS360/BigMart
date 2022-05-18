@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react';
 const FilterItems = ({item}) => {
   const [itemDetails, setItemDetails] = useState({description:[{para:"",highlights:[]}]});
   const getItem = async () => {
-    const response = await fetch(`http://localhost:8000/api/auth/getitem/${item}`, {
+    const response = await fetch(`${process.env.REACT_APP_BACKEND_URI}/api/auth/getitem/${item}`, {
       method: "GET",
       headers: {
         'Content-Type': 'application/json'

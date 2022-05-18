@@ -16,7 +16,7 @@ const Account = () => {
 
 
     const getUser = async (e) => {
-        const response = await fetch(`http://localhost:8000/api/auth/getuser`, {
+        const response = await fetch(`${process.env.REACT_APP_BACKEND_URI}/api/auth/getuser`, {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json',
@@ -31,7 +31,7 @@ const Account = () => {
 
     const updateName = async (e) => {
         e.preventDefault();
-        const response = await fetch(`http://localhost:8000/api/auth/updateId`, {
+        const response = await fetch(`${process.env.REACT_APP_BACKEND_URI}/api/auth/updateId`, {
             method: "PUT",
             headers: {
                 'Content-Type': 'application/json',

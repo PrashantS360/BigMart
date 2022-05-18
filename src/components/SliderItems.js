@@ -5,15 +5,15 @@ import { Link } from 'react-router-dom';
 
 const SliderItems = (props) => {
     const [items, setItems] = useState([]);
-    const { sliderNo, recmd, category, title } = props;
+    const { sliderNo, category, title } = props;
     let slideIndex = 0;
     let oneSlideItems = 5;
     // console.log(sliderNo, recmd, category, title );
 
 
     const getItem = async () => {
-        let response = await fetch(`http://localhost:8000/api/auth/getproducts/${category}`, {
-            method: "POST",
+        let response = await fetch(`${process.env.REACT_APP_BACKEND_URI}/api/auth/getproducts/${category}`, {
+            method: "GET",
             headers: {
                 'Content-Type': 'application/json'
             }

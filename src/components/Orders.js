@@ -6,7 +6,7 @@ const Orders = () => {
     const [searchVal, setSearchVal] = useState("");
     const [items, setItems] = useState([]);
     const getOrders = async () => {
-        const response = await fetch(`http://localhost:8000/api/auth/getorders`, {
+        const response = await fetch(`${process.env.REACT_APP_BACKEND_URI}/api/auth/getorders`, {
             method: "GET",
             headers: {
                 'Content-Type': 'application/json',
@@ -43,7 +43,6 @@ const Orders = () => {
         // len = Object.keys(itemDetails.description[0].para)[0].length;
         // eslint-disable-next-line
     }, [])
-    console.log(items);
 
 
     return (
