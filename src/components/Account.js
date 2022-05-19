@@ -3,7 +3,7 @@ import { useHistory } from 'react-router-dom';
 import userImg from '../assets/user.svg'
 import { Link } from "react-router-dom";
 
-const Account = () => {
+const Account = ({setProgress}) => {
 
     const [user, setUser] = useState({ name: "" });
     const [newVal, setNewVal] = useState({ fname: "", lname: "" });
@@ -16,6 +16,7 @@ const Account = () => {
 
 
     const getUser = async (e) => {
+        setProgress(30);
         const response = await fetch(`${process.env.REACT_APP_BACKEND_URI}/api/auth/getuser`, {
             method: "POST",
             headers: {
@@ -24,9 +25,11 @@ const Account = () => {
             },
         });
 
+        setProgress(60);
         const json = await response.json();
+        setProgress(90);
         setUser({ name: json.name });
-        // console.log(json);
+        setProgress(100);
     }
 
     const updateName = async (e) => {
@@ -43,7 +46,6 @@ const Account = () => {
         const json = await response.json();
         setUser({ name: json.user.name });
         setNewVal({ fname: "", lname: "" })
-        // console.log(json);
     }
 
     const onChange = (e) => {
@@ -118,8 +120,8 @@ const Account = () => {
                 <div className="md:w-3/4 mx-2 p-5 shadow-md shadow-gray-300 h-fit">
                     <h2 className='font-bold my-2 text-sm md:text-base'>Personal Information <span onClick={enableForm} className='text-[#2874f0] text-sm mx-4 d cursor-pointer'>Edit</span></h2>
                     <form action="" onSubmit={updateName} id="editDetails" className='hidden space-y-3 py-2 fade'>
-                        <input value={newVal.fname} onChange={onChange} className='px-4 outline-none border-[1px] mx-2 py-1 bg-gray-100 border-gray-300' type="text" name="fname" id="fname" required />
-                        <input value={newVal.lname} onChange={onChange} className='px-4 outline-none border-[1px] mx-2 py-1 bg-gray-100 border-gray-300' type="text" name="lname" id="lname" required />
+                        <input value={newVal.fname} onChange={onChange} className='px-4 outline-none border-[1px] mx-2 py-1 bg-gray-100 border-gray-300' type="text" name="fname" id="fname" placeholder='First Name'  required />
+                        <input value={newVal.lname} onChange={onChange} className='px-4 outline-none border-[1px] mx-2 py-1 bg-gray-100 border-gray-300' type="text" name="lname" id="lname" placeholder='Last Name' required />
                         <button className='bg-util px-4 mx-2 py-1 rounded-sm text-white'>Save</button>
                     </form>
                     <hr />

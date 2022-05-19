@@ -3,7 +3,7 @@ import { useLocation } from 'react-router-dom'
 import { BsFillCartCheckFill, BsFillLightningFill, BsCheckCircleFill } from 'react-icons/bs'
 import { Link } from 'react-router-dom'
 
-const Product = () => {
+const Product = ({setProgress}) => {
     const location = useLocation();
 
     const [found, setFound] = useState(false);
@@ -11,15 +11,19 @@ const Product = () => {
     // let len=1;
     const [itemDetails, setItemDetails] = useState({ description: [{ para: {}, highlights: [] }] });
     const getItem = async () => {
+        setProgress(30);
         const response = await fetch(`${process.env.REACT_APP_BACKEND_URI}/api/auth/getitem/${iCode}`, {
             method: "GET",
             headers: {
                 'Content-Type': 'application/json'
             }
         });
-
+        
+        setProgress(60);
         const json = await response.json();
+        setProgress(90);
         setItemDetails(json[0]);
+        setProgress(100);
         // len = Object.keys(json[0].description[0].para)[0].length;
     }
 
@@ -33,7 +37,6 @@ const Product = () => {
         });
 
         const json = await response.json();
-        // console.log(json);
         for (let i = 0; i < json.length; i++) {
             if (json[i].itemCode === iCode) {
                 setFound(true);
@@ -43,7 +46,6 @@ const Product = () => {
     }
 
     const addToCart = async () => {
-        console.log(itemDetails);
         let product = { title: itemDetails.title, reviews: itemDetails.reviews, price: itemDetails.price, mrp: itemDetails.mrp, discount: itemDetails.discount };
         const response = await fetch(`${process.env.REACT_APP_BACKEND_URI}/api/auth/additem`, {
             method: "POST",
@@ -55,7 +57,9 @@ const Product = () => {
         });
 
         const json = await response.json();
-        console.log(json);
+        if (json.savedItem){
+            console.log('Item Added');
+        }
         addedInCart();
     }
 

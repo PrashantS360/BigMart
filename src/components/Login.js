@@ -3,12 +3,13 @@ import LoginImg from '../assets/login.jpg'
 import { Link } from 'react-router-dom'
 import { useHistory } from 'react-router-dom'
 
-const Login = () => {
+const Login = ({setProgress, toast}) => {
     const [credentials, setCredentials] = useState({ email: "", password: "" });
     let history = useHistory();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setProgress(30);
         const response = await fetch(`${process.env.REACT_APP_BACKEND_URI}/api/auth/login`, {
             method: "POST",
             headers: {
@@ -17,21 +18,41 @@ const Login = () => {
             body: JSON.stringify({ email: credentials.email, password: credentials.password })
         });
 
+        setProgress(60);
         const json = await response.json();
+        setProgress(90);
         if (json.success) {
             localStorage.setItem('token', json.authtoken);
-            alert('You are Logged In successfully');
+            toast.success('You are Logged In successfully!', {
+                position: "top-right",
+                autoClose: 2000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+            });
 
-            history.push('/');
-            window.location.reload();
+            setTimeout(() => {
+                history.push('/');
+                window.location.reload();
+            }, 1000);
         }
         else {
-            alert('Please enter correct credentials');
+            toast.error('Please enter correct credentials!', {
+                position: "top-right",
+                autoClose: 2000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+            });
         }
+        setProgress(100);
     }
 
     const onChange = (e) => {
-        // console.log('Onchange is called');
         setCredentials({ ...credentials, [e.target.name]: e.target.value });
     }
 

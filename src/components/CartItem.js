@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 
 const CartItem = (props) => {
     // let ItemQuantity = 1;
-    let { itemDetails } = props;
+    let { itemDetails, setQtyChange } = props;
     const [ItemQuantity, setItemQuantity] = useState(itemDetails.qty);
 
     const deleteItems = async () => {
@@ -23,7 +23,6 @@ const CartItem = (props) => {
 
     function plusItem(n) {
         setQuantity(ItemQuantity + n);
-        alert("To Update Your Total Bill Please Reload The Page")
     }
 
     const setQuantity = async (n) => {
@@ -41,6 +40,7 @@ const CartItem = (props) => {
         });
 
         const json = await response.json();
+        setQtyChange(json.updatedItem.qty);
         setItemQuantity(json.updatedItem.qty);
 
         let items = quantity.innerHTML;
@@ -54,6 +54,7 @@ const CartItem = (props) => {
             minus.style.color = 'black';
         }
     }
+
 
     useEffect(() => {
         setQuantity(0);

@@ -3,10 +3,8 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 
 const Items = (props) => {
-    // let {imgLink,category,price,title,owner,itemCode} = itemDetails;
     const {itemDetails,recmd} = props;
     const {itemCode, imgLink,category,discount,reviews, title,price,rating} = itemDetails;
-    // console.log(itemDetails);
 
     return (
         <div className='flex flex-col justify-center items-center px-2 m-2'>

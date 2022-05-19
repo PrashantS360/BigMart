@@ -3,15 +3,14 @@ import FilterItems from './FilterItems'
 import { useLocation } from 'react-router-dom'
 import { useState, useEffect } from 'react';
 
-const Filter = () => {
+const Filter = ({setProgress}) => {
 
   const location = useLocation();
-  // console.log(location.pathname.substring(8,location.pathname.length);
   const [catItems, setCatItems] = useState([]);
 
   const getItems = async () => {
     let cat = location.pathname.substring(8, location.pathname.length);
-    console.log(cat);
+    setProgress(30);
     let json;
     if (cat !== 'top-offers') {
       const response = await fetch(`${process.env.REACT_APP_BACKEND_URI}/api/auth/getproducts/${cat}`, {
@@ -33,15 +32,15 @@ const Filter = () => {
       json = json.items;
       json.sort();
     }
-
+    setProgress(90);
     setCatItems(json);
+    setProgress(100);
   }
 
   useEffect(() => {
     getItems();
     // eslint-disable-next-line
   }, [])
-  console.log(catItems)
 
   return (
     <div className='flex justify-center my-24 md:my-16'>

@@ -5,70 +5,61 @@ import { Link } from 'react-router-dom';
 
 const SliderItems = (props) => {
     const [items, setItems] = useState([]);
-    const { sliderNo, category, title } = props;
-    let slideIndex = 0;
-    let oneSlideItems = 5;
-    // console.log(sliderNo, recmd, category, title );
+    const [nSlides, setNSlides] = useState(0);
+    const { sliderNo, category, title, setProgress } = props;
+    const [slideIndex, setSlideIndex] = useState(0);
+    let oneSlideItems = 4;
 
 
     const getItem = async () => {
+        setProgress(30);
         let response = await fetch(`${process.env.REACT_APP_BACKEND_URI}/api/auth/getproducts/${category}`, {
             method: "GET",
             headers: {
                 'Content-Type': 'application/json'
             }
         });
+        setProgress(60);
 
         let json = await response.json();
+        setProgress(90);
         setItems(json);
-
+        setProgress(100);
     }
 
 
     // Next/previous controls
     function plusSlides(n) {
-        showSlides(slideIndex += n);
+        setSlideIndex(slideIndex + n);
+        showSlides(slideIndex + n);
     }
 
     function showSlides(n) {
         let item = document.getElementsByClassName(`itemContainer${sliderNo}`)[0].childNodes;
-        let slides = Math.ceil(items.length / oneSlideItems);
-        // let slides = 0;
-        // console.log(item.length);
 
-        slideIndex = (n + slides) % slides;
+        let slides = Math.ceil(items.length / oneSlideItems);
+
+        setNSlides(slides)
+
+        let slideIdx = (n + slides) % slides;
+        setSlideIndex((n + slides) % slides);
         for (let i = 0; i < items.length; i++) {
             item[i].style.display = 'none';
         }
-        // console.log(slides, slideIndex);
-        for (let j = slideIndex * oneSlideItems; j < Math.min(slideIndex * oneSlideItems + oneSlideItems, items.length); j++) {
+     
+        for (let j = slideIdx * oneSlideItems; j < Math.min(slideIdx * oneSlideItems + oneSlideItems, items.length); j++) {
             item[j].style.display = 'block';
-        }
-
-        if (slideIndex === 0) {
-            document.getElementsByClassName(`prev${sliderNo}`)[0].style.display = 'none';
-        }
-        else {
-            document.getElementsByClassName(`prev${sliderNo}`)[0].style.display = 'block';
-        }
-
-        if (slideIndex === slides - 1) {
-            document.getElementsByClassName(`next${sliderNo}`)[0].style.display = 'none';
-        }
-        else {
-            document.getElementsByClassName(`next${sliderNo}`)[0].style.display = 'block';
         }
 
     }
 
     useEffect(() => {
         getItem();
-        // if (window.screen.width >= 768) {
+        if (window.screen.width >= 768) {
             showSlides(0);
-        // }
+        }
         // eslint-disable-next-line
-    }, []);
-    // console.log(items);
+    }, [items.length, slideIndex]);
 
 
 
@@ -85,7 +76,7 @@ const SliderItems = (props) => {
             </div>
             <div className="slideshow-container relative mx-2 mb-2 flex items-center justify-evenly">
                 {/* <!-- Items Container --> */}
-                <div className={`itemContainer${sliderNo} grid grid-cols-1 sm:grid-cols-2  md:grid-cols-4 px-7`} id="itemContainer">
+                <div className={`itemContainer${sliderNo} grid grid-cols-1  md:grid-cols-4 px-7`} id="itemContainer">
                     {/* Items will be added here */}
 
                     {items.map((item, idx) => {
@@ -97,8 +88,8 @@ const SliderItems = (props) => {
 
                 {/* <!-- Next and previous buttons --> */}
                 <div className="buttonControl absolute w-full" >
-                    <button className={`prev${sliderNo} cursor-pointer font-bold md:text-[1.75rem] float-left text-white md:text-black md:bg-white pb-0.5 pt-1 px-1 md:px-[0.95rem] shadow-md md:shadow-gray-400 shadow-gray-200 md:pb-7 md:pt-8 rounded-r-md`} onClick={() => { plusSlides(-1) }}>&#10094;</button>
-                    <button className={`next${sliderNo} cursor-pointer font-bold md:text-[1.75rem] float-right text-white md:text-black md:bg-white pb-0.5 pt-1 px-1 md:px-[0.95rem] shadow-md md:shadow-gray-400 shadow-gray-200 md:pb-7 md:pt-8 rounded-l-md`} onClick={() => { plusSlides(1) }}>&#10095;</button>
+                    <button className={`prev${sliderNo} cursor-pointer font-bold md:text-[1.75rem] float-left text-white md:text-black md:bg-white pb-0.5 pt-1 px-1 md:px-[0.95rem] shadow-md md:shadow-gray-400 shadow-gray-200 md:pb-7 md:pt-8 rounded-r-md ${slideIndex === 0 ? 'hidden' : 'block'}`} onClick={() => { plusSlides(-1) }}>&#10094;</button>
+                    <button className={`next${sliderNo} cursor-pointer font-bold md:text-[1.75rem] float-right text-white md:text-black md:bg-white pb-0.5 pt-1 px-1 md:px-[0.95rem] shadow-md md:shadow-gray-400 shadow-gray-200 md:pb-7 md:pt-8 rounded-l-md ${slideIndex === nSlides - 1 ? 'hidden' : 'block'}`} onClick={() => { plusSlides(1) }}>&#10095;</button>
                 </div>
             </div>
         </div>

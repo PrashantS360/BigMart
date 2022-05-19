@@ -2,10 +2,11 @@ import OrderItems from './OrderItems'
 import React, { useState, useEffect } from 'react'
 import { GrEmptyCircle } from 'react-icons/gr'
 
-const Orders = () => {
+const Orders = ({setProgress}) => {
     const [searchVal, setSearchVal] = useState("");
     const [items, setItems] = useState([]);
     const getOrders = async () => {
+        setProgress(30);
         const response = await fetch(`${process.env.REACT_APP_BACKEND_URI}/api/auth/getorders`, {
             method: "GET",
             headers: {
@@ -13,15 +14,17 @@ const Orders = () => {
                 'auth-token': localStorage.getItem('token')
             }
         });
-
+        
+        setProgress(60);
         const json = await response.json();
+        setProgress(90);
         setItems(json);
+        setProgress(100);
     }
 
     const searchRes = ()=>{
         for (let i=0;i<items.length;i++){
             let item = items[i];
-            console.log(item);
             let itm = document.getElementById(item.itemCode+item.date);
             if (!item.title.toLowerCase().includes(searchVal)){
                 itm.style.display = 'none';
@@ -34,13 +37,11 @@ const Orders = () => {
     }
 
     const onChange = (e) => {
-        // console.log('Onchange is called');
         setSearchVal(e.target.value);
     }
 
     useEffect(() => {
         getOrders();
-        // len = Object.keys(itemDetails.description[0].para)[0].length;
         // eslint-disable-next-line
     }, [])
 

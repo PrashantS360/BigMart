@@ -3,7 +3,7 @@ import SignUp from '../assets/login.jpg'
 import { Link } from 'react-router-dom'
 import { useHistory } from 'react-router-dom'
 
-const Signup = () => {
+const Signup = ({ setProgress,toast }) => {
 
     const [credentials, setCredentials] = useState({ email: "", phone: "", password: "", name: "", cpassword: "" });
 
@@ -12,8 +12,17 @@ const Signup = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         if (credentials.cpassword !== credentials.password) {
-            return alert('Password and Confirm Password field should be same!')
+            return toast.error('Password and Confirm Password field should be same!', {
+                position: "top-right",
+                autoClose: 2000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+            });
         }
+        setProgress(30);
         const response = await fetch(`${process.env.REACT_APP_BACKEND_URI}/api/auth/createuser`, {
             method: "POST",
             headers: {
@@ -22,20 +31,41 @@ const Signup = () => {
             body: JSON.stringify({ name: credentials.name, email: credentials.email, password: credentials.password, phone: credentials.phone })
         });
 
+        setProgress(60);
         const json = await response.json();
+        setProgress(90);
         if (json.success) {
             localStorage.setItem('token', json.authtoken);
-            alert('You are Signed Up successfully');
-            history.push('/');
-            window.location.reload();
+            toast.success('You are Signed Up successfully!', {
+                position: "top-right",
+                autoClose: 2000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+            });
+            
+            setTimeout(() => {
+                history.push('/');
+                window.location.reload();
+            }, 1000);
         }
         else {
-            alert('Some Error Occurred');
+            toast.error('Some Error Occurred!', {
+                position: "top-right",
+                autoClose: 2000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+            });
         }
+        setProgress(100);
     }
 
     const onChange = (e) => {
-        // console.log('Onchange is called');
         setCredentials({ ...credentials, [e.target.name]: e.target.value });
     }
 

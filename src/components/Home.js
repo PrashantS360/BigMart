@@ -11,7 +11,7 @@ import Slider from './Slider';
 import SliderItems from './SliderItems';
 import { Link } from 'react-router-dom';
 
-const Home = () => {
+const Home = ({setProgress}) => {
 
   return (
     <div className="flex justify-center my-24 md:my-16">
@@ -28,9 +28,9 @@ const Home = () => {
         </div>
 
         <Slider />
-        <SliderItems category="mobiles" sliderNo={1} recmd={true} title="Deals of the Day" />
-        <SliderItems category="fashion" sliderNo={2} recmd={true} title="Discounts for You" />
-        <SliderItems category="appliances" sliderNo={3} title="Suggested for You" />
+        <SliderItems setProgress={setProgress} category="mobiles" sliderNo={1} recmd={true} title="Deals of the Day" />
+        <SliderItems setProgress={setProgress} category="fashion" sliderNo={2} recmd={true} title="Discounts for You" />
+        <SliderItems setProgress={setProgress} category="appliances" sliderNo={3} title="Suggested for You" />
       </div>
     </div>
   );

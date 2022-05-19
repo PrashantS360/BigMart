@@ -3,7 +3,7 @@ import CartItem from './CartItem'
 import { GrEmptyCircle } from 'react-icons/gr'
 import { useHistory } from 'react-router-dom'
 
-const Cart = () => {
+const Cart = ({ setProgress, toast }) => {
     let history = useHistory();
 
     const [items, setItems] = useState([]);
@@ -13,14 +13,15 @@ const Cart = () => {
     const generateBill = (items) => {
         let mrp = 0, price = 0;
         for (let i = 0; i < items.length; i++) {
-            // console.log(json[i]);
             mrp += items[i].qty * items[i].product[0].mrp;
             price += items[i].qty * items[i].product[0].price;
         }
         setTotalMrp(mrp);
         setTotalPrice(price);
     }
+
     const getCartItems = async () => {
+        setProgress(30);
         const response = await fetch(`${process.env.REACT_APP_BACKEND_URI}/api/auth/mycart`, {
             method: "GET",
             headers: {
@@ -28,16 +29,17 @@ const Cart = () => {
                 'auth-token': localStorage.getItem('token')
             }
         });
-
+        setProgress(60);
         const json = await response.json();
+        setProgress(90);
         setItems(json);
         generateBill(json);
+        setProgress(100);
     }
 
     const myorder = async () => {
         for (let i = 0; i < items.length; i++) {
             let item = items[i];
-            console.log(item);
             const response = await fetch(`${process.env.REACT_APP_BACKEND_URI}/api/auth/order`, {
                 method: "POST",
                 headers: {
@@ -51,7 +53,16 @@ const Cart = () => {
             }
         }
 
-        alert('Your Order Is Placed Successfully');
+        toast.success('Your order is placed successfully!', {
+            position: "top-right",
+            autoClose: 2000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+        });
+
         clearCart();
     }
 
@@ -67,18 +78,20 @@ const Cart = () => {
             });
 
             const json = await response.json();
-            if(json){
+            if (json) {
                 console.log("cart is cleared");
             }
         }
         history.push('/');
     }
 
+    const [qtyChange, setQtyChange] = useState(0);
     useEffect(() => {
         getCartItems();
         // eslint-disable-next-line
-    }, [])
-    // console.log(items);
+    }, [qtyChange])
+
+
 
     return (
         <div className="flex justify-center my-16">
@@ -105,7 +118,7 @@ const Cart = () => {
                     {
                         items.map((item) => {
                             // return <div onChange={generateBill} key={item.itemCode}><CartItem itemDetails={item} /></div>
-                            return <CartItem itemDetails={item} key={item.itemCode} />
+                            return <CartItem itemDetails={item} key={item.itemCode} setQtyChange={setQtyChange} />
                         })
                     }
 
